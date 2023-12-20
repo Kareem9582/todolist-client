@@ -12,7 +12,8 @@ const ToDoListView = (): JSX.Element => {
     const [items, setItems] = useState<ToDoItem[]>();
     const [filter, setFilter] = useState<SearchFilter>({
         title: '',
-        description: ''
+        description: '',
+        completionDate:''
     });
 
 
@@ -50,7 +51,8 @@ const ToDoListView = (): JSX.Element => {
                             onChange={e => setFilter({ ...filter, 'description': e.target.value })} />
                     </td>
                     <td></td>
-                    <td></td>
+                    <td><input type='date' name='completionDate' className='form-control' placeholder='Enter Description' 
+                        onChange={e => setFilter({ ...filter, 'completionDate': e.target.value })}/></td>
                     <td>
                         <form onSubmit={handleFormSubmit}>
                             <button className='btn btn-info'>Search</button>
