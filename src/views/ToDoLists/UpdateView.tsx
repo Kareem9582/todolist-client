@@ -27,7 +27,7 @@ const UpdateView = (): JSX.Element => {
     async function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const result = await UpdateItem(item);
-        if (result == 202) {
+        if (result === 202) {
             alert("Item Updated, Now you will be directed to Main page");
             navigate('/');
         }

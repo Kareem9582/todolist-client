@@ -29,7 +29,7 @@ const DeleteView = (): JSX.Element => {
     async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
        e.preventDefault();
         const result = await DeleteItem(item.id);
-        if (result == 202) {
+        if (result === 202) {
             alert("Item Deleted, Now you will be directed to Main page");
             navigate('/');
         }

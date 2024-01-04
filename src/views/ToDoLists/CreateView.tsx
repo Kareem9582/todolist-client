@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PermissionGate from "../../components/PermissionGate/PermissionGate";
 import NoPermissionsView from "../NoPermissionsView/NoPermissionsView";
 import { ToDoItem } from "../../Types/ToDoItem";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { CreateItem } from "../../services/ToDoListService";
 
 const CreateView = (): JSX.Element => {
@@ -17,7 +17,7 @@ const CreateView = (): JSX.Element => {
     async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const result = await CreateItem(item);
-        if (result == 204) {
+        if (result === 204) {
             alert("New Item Created, Now you will be directed to Main page");
             navigate('/');
         }

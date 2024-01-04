@@ -7,8 +7,14 @@ import { Link } from 'react-router-dom';
 import FormatDate from '../../Helpers/DateHelper';
 import { SearchFilter } from '../../Types/SearchFilter';
 import SignOutView from '../Membership/SignOutView';
+import { useViewport } from '../../hooks/useViewport';
+import DataTableColumn from '../../components/DataTableColumn';
+import React from 'react';
+
+
 
 const ToDoListView = (): JSX.Element => {
+    const {viewportWidth} = useViewport();
     const [items, setItems] = useState<ToDoItem[]>();
     const [filter, setFilter] = useState<SearchFilter>({
         title: '',
@@ -33,26 +39,30 @@ const ToDoListView = (): JSX.Element => {
             <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Description</th>
-                    <th>Is Completed</th>
-                    <th>Completion Date</th>
+                    { IsDesktopSize() && (
+                        <React.Fragment>
+                            <th>Description</th>
+                            <th>Is Completed</th>
+                            <th>Completion Date</th>
+                        </React.Fragment>      
+                    )}
                     <th></th>
                 </tr>
             </thead>
             <tbody>
             
                 <tr>
-                    <td>
-                        <input type='text' name='title' className='form-control' placeholder='Enter Title' 
-                        onChange={e => setFilter({ ...filter, 'title': e.target.value })} />
-                    </td>
-                    <td>
-                        <input type='text' name='title' className='form-control' placeholder='Enter Title'
-                            onChange={e => setFilter({ ...filter, 'description': e.target.value })} />
-                    </td>
-                    <td></td>
-                    <td><input type='date' name='completionDate' className='form-control' placeholder='Enter Description' 
+                    
+                    <DataTableColumn name='title' placeholder='Enter Title' action={e=> setFilter({ ...filter, 'title': e.target.value })}/>
+                    { IsDesktopSize() && (
+                        <React.Fragment>
+                            <DataTableColumn name='Description' placeholder='Enter Description' action={e => setFilter({ ...filter, 'description': e.target.value })}/>
+                            <td></td>
+                            <td><input type='date' name='completionDate' className='form-control' placeholder='Enter Description' 
                         onChange={e => setFilter({ ...filter, 'completionDate': e.target.value })}/></td>
+                        </React.Fragment>)
+                    }
+
                     <td>
                         <form onSubmit={handleFormSubmit}>
                             <button className='btn btn-info'>Search</button>
@@ -63,9 +73,13 @@ const ToDoListView = (): JSX.Element => {
                 {items.map(item =>
                     <tr key={item.id}>
                         <td>{item.title}</td>
-                        <td>{item.description}</td>
-                        <td>{item.isCompleted? 'Yes' : 'No'}</td>
-                        <td>{FormatDate(item.completionDate)}</td>
+                        { IsDesktopSize() && (
+                            <React.Fragment>
+                                <td>{item.description}</td>
+                                <td>{item.isCompleted? 'Yes' : 'No'}</td>
+                                <td>{FormatDate(item.completionDate)}</td>
+                            </React.Fragment>)
+                        }
                         <td>
                             <Link to={`/Delete/${item.id}`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
@@ -105,7 +119,7 @@ const ToDoListView = (): JSX.Element => {
     async function GetData() {
         const response = await GetDoToItems();
         const data = await response;
-        if(response.status == 200){
+        if(response.status === 200){
             setItems(await data.json());
         }
     }
@@ -114,6 +128,10 @@ const ToDoListView = (): JSX.Element => {
         const response = await SearchItems(filter);
         const data = await response;
         setItems(data);
+    }
+
+    function IsDesktopSize(): boolean{
+        return viewportWidth >= 1024;
     }
 }
 

@@ -17,7 +17,7 @@ const SignUpView = (): JSX.Element => {
     async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         const result = await UserSignUp(user);
-        if (result == 200) {
+        if (result === 200) {
             alert("New User Created, Now you will be directed to login page");
             navigate('/Login');
         }
